@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Room Booking</title>
+
+<style>
+body {
+    font-family: Arial;
+    color: white;
+    text-align: center;
+    background-size: cover;
+    background-position: center;
+    transition: 1s;
+}
+
+.container {
+    width: 90%;
+    max-width: 400px;
+    margin: 60px auto;
+    background: rgba(0,0,0,0.7);
+    padding: 20px;
+    border-radius: 10px;
+    border: 2px solid #00bcd4;
+}
+
+h2 {
+    margin-bottom: 20px;
+    color: #00bcd4;
+}
+
+input, select {
+    width: 90%;
+    padding: 10px;
+    margin: 8px;
+    border-radius: 5px;
+    border: none;
+}
+
+button {
+    padding: 10px 20px;
+    background: #00bcd4;
+    border: none;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+button:hover {
+    background: #0097a7;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h2>Room Booking Form</h2>
+
+    <input type="text" id="name" placeholder="Full Name">
+    <input type="number" id="phone" placeholder="Phone Number">
+    <input type="text" id="cnic" placeholder="CNIC Number">
+    <input type="text" id="address" placeholder="Address">
+
+    <select id="room">
+        <option>Standard Room</option>
+        <option>Deluxe Room</option>
+        <option>Luxury Room</option>
+        <option>Premium Suite</option>
+    </select>
+
+    <input type="text" id="location" placeholder="Hotel / Location">
+    <input type="date" id="date">
+    <input type="number" id="days" placeholder="Number of Days">
+
+    <button onclick="submitForm()">Submit Booking</button>
+
+    <h3 id="result"></h3>
+
+</div>
+
+<script>
+
+/* BACKGROUND ROOM + RESTAURANT SLIDER */
+const images = [
+    "https://images.unsplash.com/photo-1566665797739-1674de7a421a", // hotel room
+    "https://images.unsplash.com/photo-1501117716987-c8e1ecb2106c", // restaurant
+    "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa", // luxury room
+    "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb"  // hotel view
+];
+
+let i = 0;
+
+function changeBackground() {
+    document.body.style.backgroundImage = "url('" + images[i] + "')";
+    i = (i + 1) % images.length;
+}
+
+setInterval(changeBackground, 3000);
+changeBackground();
+
+
+/* FORM FUNCTION */
+function submitForm() {
+    let name = document.getElementById("name").value;
+    let phone = document.getElementById("phone").value;
+    let cnic = document.getElementById("cnic").value;
+    let address = document.getElementById("address").value;
+    let room = document.getElementById("room").value;
+    let location = document.getElementById("location").value;
+    let date = document.getElementById("date").value;
+    let days = document.getElementById("days").value;
+
+    if(name === "" || phone === "" || cnic === "" || address === "" || location === "" || date === "" || days === ""){
+        document.getElementById("result").innerText = "Please fill all fields";
+        return;
+    }
+
+    document.getElementById("result").innerText = "Booking Successful!";
+}
+
+</script>
+
+</body>
+</html>
