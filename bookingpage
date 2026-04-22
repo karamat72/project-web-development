@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GB Booking System </title>
+
+<style>
+body {
+    font-family: Arial;
+    color: white;
+    text-align: center;
+    background-size: cover;
+    background-position: center;
+    transition: background-image 1s ease-in-out;
+}
+
+.container {
+    width: 90%;
+    margin: auto;
+    padding: 20px;
+}
+
+h1 {
+    margin-bottom: 20px;
+    color: #00bcd4;
+}
+
+.box {
+    display: flex;
+    gap: 20px;
+    background: rgba(0,0,0,0.75);
+    padding: 20px;
+    margin: 20px auto;
+    border: 2px solid #00bcd4;
+    border-radius: 10px;
+    max-width: 800px;
+    align-items: center;
+}
+
+.left, .right {
+    width: 100%;
+}
+
+input, select {
+    padding: 10px;
+    margin: 10px;
+    width: 90%;
+    border-radius: 5px;
+    border: none;
+}
+
+button {
+    padding: 10px 20px;
+    background: #00bcd4;
+    border: none;
+    color: white;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+button:hover {
+    background: #0097a7;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>GB Booking System</h1>
+
+<!-- CAR BOOKING -->
+<div class="box">
+<div class="left">
+
+    <h2>Car Rental</h2>
+
+    <select id="car">
+        <option value="7000">Corolla - 7000/day</option>
+        <option value="4000">Vitz - 4000/day</option>
+        <option value="12000">TX - 12000/day</option>
+        <option value="14000">Prado - 14000/day</option>
+    </select>
+
+    <input type="number" id="days" placeholder="Enter Days">
+
+    <label>
+        <input type="checkbox" id="fuel">
+        Fuel Provided by Customer
+    </label>
+
+    <br>
+    <button onclick="calculateCar()">Calculate Car Rent</button>
+
+    <h3 id="carResult"></h3>
+
+    <!-- ✅ CHANGE HERE -->
+    <button id="carApply" onclick="openCarForm()" style="display:none;">Apply Now</button>
+
+</div>
+</div>
+
+<!-- ROOM BOOKING -->
+<div class="box">
+<div class="left">
+
+    <h2>Room Booking</h2>
+
+    <select id="roomRate">
+        <option value="6000">Standard - 6000/night</option>
+        <option value="15000">Deluxe - 15000/night</option>
+        <option value="25000">Luxury - 25000/night</option>
+        <option value="40000">Premium - 40000/night</option>
+    </select>
+
+    <input type="number" id="roomDays" placeholder="Enter Days">
+
+    <button onclick="calculateRoom()">Calculate Room</button>
+
+    <h3 id="roomResult"></h3>
+
+    <!-- ✅ CHANGE HERE -->
+    <button id="roomApply" onclick="openRoomForm()" style="display:none;">Apply Now</button>
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+/* BACKGROUND SLIDESHOW */
+let images = [
+    "https://images.unsplash.com/photo-1503376780353-7e6692767b70",
+    "https://images.unsplash.com/photo-1501785888041-af3ef285b470",
+    "https://images.unsplash.com/photo-1502877338535-766e1452684a",
+    "https://images.unsplash.com/photo-1501117716987-c8e1ecb2106c",
+];
+
+let i = 0;
+
+function changeBackground() {
+    document.body.style.backgroundImage = "url('" + images[i] + "')";
+    i = (i + 1) % images.length;
+}
+
+setInterval(changeBackground, 4000);
+changeBackground();
+
+/* DISCOUNT */
+function getDiscount(days) {
+    if (days == 2) return 5;
+    else if (days == 3) return 10;
+    else if (days == 4) return 15;
+    else if (days == 5) return 20;
+    else if (days == 6) return 25;
+    else if (days >= 7) return 30;
+    else return 0;
+}
+
+/* CAR */
+function calculateCar() {
+    let price = parseInt(document.getElementById("car").value);
+    let days = parseInt(document.getElementById("days").value);
+    let fuelCustomer = document.getElementById("fuel").checked;
+
+    if (!days || days <= 0) {
+        document.getElementById("carResult").innerText = "Enter valid days";
+        return;
+    }
+
+    let baseRent = price * days;
+    let fuelCost = !fuelCustomer ? price * 0.8 * days : 0;
+
+    let total = baseRent + fuelCost;
+
+    let discountPercent = getDiscount(days);
+    let discountAmount = (total * discountPercent) / 100;
+    let finalTotal = total - discountAmount;
+
+    document.getElementById("carResult").innerText =
+        "Base Rent: " + baseRent + " PKR\n" +
+        "Fuel Cost: " + Math.round(fuelCost) + " PKR\n" +
+        "Discount: " + discountPercent + "%\n" +
+        "Final Total: " + Math.round(finalTotal) + " PKR";
+
+    document.getElementById("carApply").style.display = "inline-block";
+}
+
+/* ROOM */
+function calculateRoom() {
+    let rate = parseInt(document.getElementById("roomRate").value);
+    let days = parseInt(document.getElementById("roomDays").value);
+
+    if (!days || days <= 0) {
+        document.getElementById("roomResult").innerText = "Enter valid days";
+        return;
+    }
+
+    let total = rate * days;
+
+    let discountPercent = getDiscount(days);
+    let discountAmount = (total * discountPercent) / 100;
+    let finalTotal = total - discountAmount;
+
+    document.getElementById("roomResult").innerText =
+        "Room Cost: " + total + " PKR\n" +
+        "Discount: " + discountPercent + "%\n" +
+        "Final Total: " + Math.round(finalTotal) + " PKR";
+
+    document.getElementById("roomApply").style.display = "inline-block";
+}
+
+/* ✅ EXTERNAL LINKS (ADDED ONLY) */
+function openCarForm() {
+    window.open("applycar.html", "_blank");
+}
+
+function openRoomForm() {
+    window.open("applyroom.html", "_blank");
+}
+
+</script>
+
+</body>
+</html>
